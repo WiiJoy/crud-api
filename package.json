@@ -6,7 +6,9 @@
   "scripts": {
     "format": "prettier --write \"src/**/*.ts\"",
     "lint": "eslint \"src/**/*.ts\" --fix",
-    "test": "jest"
+    "test": "jest",
+    "start:dev": "nodemon ./src/index.ts",
+    "start:prod": "webpack --mode=production && node ./dist/bundle.js"
   },
   "repository": {
     "type": "git",

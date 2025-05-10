@@ -1,9 +1,24 @@
 import path from 'path'
 
 module.exports = {
-  entry: './src/index.js',
+  mode: 'production',
+  entry: path.resolve(__dirname, './src/index.ts'),
+  module: {
+    rules: [
+      {
+        test: /\.(ts|tsx)$/i,
+        use: 'ts-loader',
+        include: [path.resolve(__dirname, 'src')],
+        exclude: /node_modules/,
+      },
+    ],
+  },
+  resolve: {
+    extensions: ['.ts', '.js'],
+  },
+  target: 'node',
   output: {
-    filename: 'main.js',
+    filename: 'bundle.js',
     path: path.resolve(__dirname, 'dist'),
   },
 };
