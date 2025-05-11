@@ -1,6 +1,6 @@
 import { IUser, IAnswer, database } from "./types";
 import { v4 as uuidv4 } from 'uuid'
-import { ERROR } from "./constants";
+import { ERROR, STATUS } from "./constants";
 
 class Database {
     private db: database
@@ -19,7 +19,7 @@ class Database {
     public getUsers(): IAnswer {
         return {
             content: this.db,
-            status: 200
+            status: STATUS.SUCCESS
         }
     }
 
@@ -27,7 +27,7 @@ class Database {
         const user = this.db.find(user => user.id === id)
         return {
             content: user || ERROR.NOT_FOUND,
-            status: user ? 200 : 404
+            status: user ? STATUS.SUCCESS : STATUS.NOT_FOUND
         }
     }
 
@@ -40,7 +40,7 @@ class Database {
         this.db.push(newUser)
         return {
             content: newUser,
-            status: 201
+            status: STATUS.CREATE
         }
     }
 
@@ -57,7 +57,7 @@ class Database {
 
         return {
             content: isUpdate ? this.db[index] : ERROR.NOT_FOUND,
-            status: isUpdate ? 200 : 404
+            status: isUpdate ? STATUS.SUCCESS : STATUS.NOT_FOUND
         }
     }
 
@@ -69,7 +69,7 @@ class Database {
 
         return {
             content: deleted || ERROR.NOT_FOUND,
-            status: deleted ? 204 : 404
+            status: deleted ? STATUS.REMOVE : STATUS.NOT_FOUND
         }
     }
 }
