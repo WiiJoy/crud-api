@@ -1,4 +1,9 @@
-import path from 'path'
+const path = require('path')
+const { EnvironmentPlugin } = require('webpack')
+const { config } = require('dotenv')
+const ESLintPlugin = require('eslint-webpack-plugin')
+
+config()
 
 module.exports = {
   mode: 'production',
@@ -15,10 +20,21 @@ module.exports = {
   },
   resolve: {
     extensions: ['.ts', '.js'],
+    alias: {
+      'node:http': require.resolve('http'),
+    }
   },
   target: 'node',
   output: {
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'dist'),
   },
+  plugins: [
+    new EnvironmentPlugin(['PORT']),
+    new ESLintPlugin({
+      emitError: true,
+      emitWarning: true,
+      failOnError: true
+    })
+  ]
 };
