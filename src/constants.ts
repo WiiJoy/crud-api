@@ -1,8 +1,9 @@
 export const ERROR = {
     NOT_FOUND: 'User ID not found. Please check the ID and try again',
-    INVALID_URL: 'Invalid URL: please check the address and try again',
+    INVALID_URL: 'Invalid endpoint: please check and try again',
     INVALID_ID: 'Invalid ID: please check the ID and try again',
-    SERVER_ERROR: 'Internal server error'
+    SERVER_ERROR: 'Internal server error',
+    INVALID_METHOD: 'Invalid method: please check and try again'
 }
 
 export const STATUS = {

@@ -68,6 +68,12 @@ export const config = async (req: IncomingMessage, res: ServerResponse) => {
                 const deletedData = db.removeUser(id)
                 outputRes(res, deletedData)
                 break
+            default:
+                outputRes(res, {
+                    status: STATUS.NOT_FOUND,
+                    content: ERROR.INVALID_METHOD
+                })
+                break
         }
     } catch (error) {
         outputRes(res, {
