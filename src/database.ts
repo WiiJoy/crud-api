@@ -1,4 +1,5 @@
-import { IUser, database } from "types";
+import { IUser, database } from "./types";
+import { v4 as uuidv4 } from 'uuid'
 
 class Database {
     private db: database
@@ -23,8 +24,13 @@ class Database {
     }
 
     public createUser(user: IUser): IUser {
-        this.db.push(user)
-        return user
+        const id = uuidv4()
+        const newUser = {
+            ...user,
+            id
+        }
+        this.db.push(newUser)
+        return newUser
     }
 
     public updateUser(id: string, user: IUser): IUser | undefined {

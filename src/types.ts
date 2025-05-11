@@ -1,8 +1,8 @@
 export interface IUser {
-    id: string,
     username: string,
     age: number,
-    hobbies: string[]
+    hobbies: string[],
+    id?: string,
 }
 
 export type database = IUser[]
