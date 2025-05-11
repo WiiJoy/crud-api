@@ -1,10 +1,12 @@
 import { IncomingMessage, ServerResponse } from 'node:http';
 import { db } from './database'
-import { IUser } from './types';
+import { IUser, IAnswer } from './types';
 import { getId } from './utils';
+import { validate as uuidValidate } from 'uuid'
 
 export const config = async (req: IncomingMessage, res: ServerResponse) => {
     const { method, url } = req
+    console.log('url', url)
     try {
         if (!url || !url.startsWith('/api/users')) {
             res.statusCode = 404
@@ -16,9 +18,20 @@ export const config = async (req: IncomingMessage, res: ServerResponse) => {
 
         const id = getId(url)
 
+        if (id && !uuidValidate(id)) {
+            res.statusCode = 400
+            res.setHeader('Content-Type', 'application/json')
+            res.write(JSON.stringify('Invalid ID: please check the ID and try again'))
+            res.end()
+            return
+        }
+
         switch (method) {
             case 'GET':
-                let data: IUser | IUser[] | null = null
+                let data: IAnswer = {
+                    content: '',
+                    status: 500
+                }
 
                 if (id) {
                     data = db.getUser(id)
@@ -26,9 +39,9 @@ export const config = async (req: IncomingMessage, res: ServerResponse) => {
                     data = db.getUsers()
                 }
 
-                res.statusCode = 200
+                res.statusCode = data.status
                 res.setHeader('Content-Type', 'application/json');
-                res.write(JSON.stringify(data))
+                res.write(JSON.stringify(data.content))
                 res.end()
                 break
             case 'POST':
@@ -40,8 +53,8 @@ export const config = async (req: IncomingMessage, res: ServerResponse) => {
                     const user: IUser = JSON.parse(bodyData)
                     const saved = db.createUser(user)
                     res.setHeader('Content-Type', 'application/json')
-                    res.statusCode = 201
-                    res.write(JSON.stringify(saved))
+                    res.statusCode = saved.status
+                    res.write(JSON.stringify(saved.content))
                     res.end()
                 })
                 break
@@ -54,16 +67,17 @@ export const config = async (req: IncomingMessage, res: ServerResponse) => {
                     const user: IUser = JSON.parse(updateData)
                     const updated = db.updateUser(id, user)
                     res.setHeader('Content-Type', 'application/json')
-                    res.statusCode = 200
-                    res.write(JSON.stringify(updated))
+                    res.statusCode = updated.status
+                    res.write(JSON.stringify(updated.content))
                     res.end()
                 })
                 break
             case 'DELETE':
                 const deletedData = db.removeUser(id)
+                console.log('deletedData', deletedData)
                 res.setHeader('Content-Type', 'application/json')
-                res.statusCode = 204
-                res.write(JSON.stringify(deletedData))
+                res.statusCode = deletedData.status
+                res.write(JSON.stringify(deletedData.content))
                 res.end()
                 break
         }

@@ -5,4 +5,9 @@ export interface IUser {
     id?: string,
 }
 
+export interface IAnswer {
+    content: IUser | IUser[] | string | undefined,
+    status: number
+}
+
 export type database = IUser[]
