@@ -9,6 +9,8 @@ const app = () => {
     server.listen(port, () => {
         console.log(`App running on port ${port}!`)
     })
+
+    return server
 }
 
 export default app

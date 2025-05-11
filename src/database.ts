@@ -7,12 +7,12 @@ class Database {
 
     constructor() {
         this.db = [
-            {
-                id: '316a7cbd-3932-49ad-9678-a2a2fa8fb974',
-                username: 'Test User',
-                age: 30,
-                hobbies: ['MMORPG', 'DnD']
-            }
+            // {
+            //     id: '316a7cbd-3932-49ad-9678-a2a2fa8fb974',
+            //     username: 'Test User',
+            //     age: 30,
+            //     hobbies: ['MMORPG', 'DnD']
+            // }
         ]
     }
 
