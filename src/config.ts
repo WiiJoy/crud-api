@@ -14,9 +14,10 @@ export const config = async (req: IncomingMessage, res: ServerResponse) => {
             return
         }
 
+        const id = getId(url)
+
         switch (method) {
             case 'GET':
-                const id = getId(url)
                 let data: IUser | IUser[] | null = null
 
                 if (id) {
@@ -45,8 +46,25 @@ export const config = async (req: IncomingMessage, res: ServerResponse) => {
                 })
                 break
             case 'PUT':
+                let updateData = ''
+                req.on('data', chunk => {
+                    updateData += chunk
+                })
+                req.on('end', () => {
+                    const user: IUser = JSON.parse(updateData)
+                    const updated = db.updateUser(id, user)
+                    res.setHeader('Content-Type', 'application/json')
+                    res.statusCode = 200
+                    res.write(JSON.stringify(updated))
+                    res.end()
+                })
                 break
             case 'DELETE':
+                const deletedData = db.removeUser(id)
+                res.setHeader('Content-Type', 'application/json')
+                res.statusCode = 204
+                res.write(JSON.stringify(deletedData))
+                res.end()
                 break
         }
     } catch (error) {
