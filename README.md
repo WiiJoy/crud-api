@@ -10,6 +10,7 @@
 ## Run server
 - Run the App in development mode: ```npm run start:dev```
 - Create bundle and run the App in production mode: ```npm run start:prod```
+- Run tests: ```npm run test```
 
 ## Endpoints
 - `GET api/users` to get all users
