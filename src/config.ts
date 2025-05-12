@@ -1,7 +1,7 @@
 import { IncomingMessage, ServerResponse } from 'node:http';
 import { db } from './database'
 import { IUser, IAnswer } from './types';
-import { getId, outputRes, urlValidate } from './utils';
+import { getId, outputRes, urlValidate, bodyValidate } from './utils';
 import { validate as uuidValidate } from 'uuid'
 import { ERROR, STATUS } from './constants'
 
@@ -57,8 +57,13 @@ export const config = async (req: IncomingMessage, res: ServerResponse) => {
                 })
                 req.on('end', () => {
                     const user: IUser = JSON.parse(bodyData)
-                    const saved = db.createUser(user)
-                    outputRes(res, saved)
+                    const checkValid = bodyValidate(user)
+
+                    const saved = checkValid.isValid ? db.createUser(user) : checkValid
+                    outputRes(res, {
+                        status: saved.status || STATUS.INVALID,
+                        content: saved.content || ERROR.STH_WRONG
+                    })
                 })
                 break
             case 'PUT':
@@ -68,8 +73,13 @@ export const config = async (req: IncomingMessage, res: ServerResponse) => {
                 })
                 req.on('end', () => {
                     const user: IUser = JSON.parse(updateData)
-                    const updated = db.updateUser(id, user)
-                    outputRes(res, updated)
+                    const checkValid = bodyValidate(user)
+
+                    const updated = checkValid.isValid ? db.updateUser(id, user) : checkValid
+                    outputRes(res, {
+                        status: updated.status || STATUS.INVALID,
+                        content: updated.content || ERROR.STH_WRONG
+                    })
                 })
                 break
             case 'DELETE':

@@ -3,7 +3,10 @@ export const ERROR = {
     INVALID_URL: 'Invalid endpoint: please check and try again',
     INVALID_ID: 'Invalid ID: please check the ID and try again',
     SERVER_ERROR: 'Internal server error',
-    INVALID_METHOD: 'Invalid method: please check and try again'
+    INVALID_METHOD: 'Invalid method: please check and try again',
+    CONTAIN_FIELDS: 'Request body does not contain required fields',
+    WRONG_TYPES: 'Request body fields have wrong types',
+    STH_WRONG: 'Something is wrong! Please check and try again'
 }
 
 export const STATUS = {
