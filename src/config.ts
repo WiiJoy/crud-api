@@ -57,7 +57,7 @@ export const config = async (req: IncomingMessage, res: ServerResponse) => {
                 })
                 req.on('end', () => {
                     const user: IUser = JSON.parse(bodyData)
-                    const checkValid = bodyValidate(user)
+                    const checkValid = bodyValidate(user, true)
 
                     const saved = checkValid.isValid ? db.createUser(user) : checkValid
                     outputRes(res, {
@@ -73,7 +73,7 @@ export const config = async (req: IncomingMessage, res: ServerResponse) => {
                 })
                 req.on('end', () => {
                     const user: IUser = JSON.parse(updateData)
-                    const checkValid = bodyValidate(user)
+                    const checkValid = bodyValidate(user, false)
 
                     const updated = checkValid.isValid ? db.updateUser(id, user) : checkValid
                     outputRes(res, {

@@ -1,6 +1,7 @@
 import { IUser, IAnswer, database } from "./types";
 import { v4 as uuidv4 } from 'uuid'
 import { ERROR, STATUS } from "./constants";
+import { setUsefulFields } from "./utils";
 
 class Database {
     private db: database
@@ -33,8 +34,9 @@ class Database {
 
     public createUser(user: IUser): IAnswer {
         const id = uuidv4()
+        const template = setUsefulFields(user)
         const newUser: IUser = {
-            ...user,
+            ...template,
             id
         }
         this.db.push(newUser)
@@ -48,10 +50,12 @@ class Database {
         const index = this.db.findIndex(user => user.id === id)
         const isUpdate = index >= 0
 
+        const template = setUsefulFields(user, this.db[index])
+
         if (isUpdate) {
             this.db[index] = {
                 ...this.db[index],
-                ...user
+                ...template
             }
         }
 

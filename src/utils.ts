@@ -20,8 +20,8 @@ export const urlValidate = (url: string) => {
     return url === '/api/users'
 }
 
-export const bodyValidate = (body: IUser) => {
-    if (!('username' in body) || !("age" in body) || !('hobbies' in body)) {
+export const bodyValidate = (body: IUser, isNew: boolean) => {
+    if (isNew && (!('username' in body) || !("age" in body) || !('hobbies' in body))) {
         return {
             isValid: false,
             status: STATUS.INVALID,
@@ -29,7 +29,9 @@ export const bodyValidate = (body: IUser) => {
         }
     }
 
-    if (typeof body.username !== 'string' || typeof body.age !== 'number' || !Array.isArray(body.hobbies)) {
+    if ((body.username && typeof body.username !== 'string') ||
+        (body.age && typeof body.age !== 'number') ||
+        (body.hobbies && !Array.isArray(body.hobbies))) {
         return {
             isValid: false,
             status: STATUS.INVALID,
@@ -38,4 +40,25 @@ export const bodyValidate = (body: IUser) => {
     }
 
     return { isValid: true }
+}
+
+export const setUsefulFields = (user: IUser, old?: IUser) => {
+    const template: IUser = {
+        username: '',
+        age: 0,
+        hobbies: []
+    }
+
+    const targetUser: IUser = old || template
+
+    for (const key in template) {
+        const keyName = key as keyof IUser
+        if (keyName in user) copyField(keyName, targetUser, user)
+    }
+
+    return targetUser
+}
+
+const copyField = < T extends IUser > (k: keyof T, target: T, source: T) => {
+    target[k] = source[k]
 }
