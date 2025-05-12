@@ -1,7 +1,7 @@
 import { IncomingMessage, ServerResponse } from 'node:http';
 import { db } from './database'
 import { IUser, IAnswer } from './types';
-import { getId, outputRes } from './utils';
+import { getId, outputRes, urlValidate } from './utils';
 import { validate as uuidValidate } from 'uuid'
 import { ERROR, STATUS } from './constants'
 
@@ -23,6 +23,14 @@ export const config = async (req: IncomingMessage, res: ServerResponse) => {
             outputRes(res, {
                 status: STATUS.INVALID,
                 content: ERROR.INVALID_ID
+            })
+            return
+        }
+
+        if (!id && !urlValidate(url)) {
+            outputRes(res, {
+                status: STATUS.NOT_FOUND,
+                content: ERROR.INVALID_URL
             })
             return
         }

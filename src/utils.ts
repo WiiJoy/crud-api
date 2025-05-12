@@ -14,3 +14,7 @@ export const outputRes = (res: ServerResponse, data: IAnswer) => {
     res.write(JSON.stringify(data.content))
     res.end()
 }
+
+export const urlValidate = (url: string) => {
+    return url === '/api/users'
+} 
